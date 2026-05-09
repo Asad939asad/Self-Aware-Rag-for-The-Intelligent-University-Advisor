@@ -1,0 +1,16 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+.env
+vector_store_fallback.pkl
+chroma_db/
+
+# Frontend
+university-advisor-ui/node_modules/
+university-advisor-ui/dist/
+university-advisor-ui/.next/
+.DS_Store
+
+# Logs
+*.log
