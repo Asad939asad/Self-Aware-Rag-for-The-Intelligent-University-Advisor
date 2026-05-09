@@ -70,3 +70,27 @@ Lumina has been rigorously tested against 7 distinct scenarios, achieving a **10
 ---
 **Lead Developer:** [Asad Irfan]  
 **Project Repo:** [GitHub Link](https://github.com/Asad939asad/Self-Aware-Rag-for-The-Intelligent-University-Advisor)
+
+## 8. Project Structure
+```text
+.
+├── self_rag_agent.py          # FastAPI Backend Server
+├── graph.py                   # LangGraph State Machine Logic
+├── tools.py                   # RAG Retrieval & Web Search Tools
+├── ingest.py                  # Document Processing & Embedding
+├── .env                       # API Credentials (Hidden)
+├── vector_store_fallback.pkl  # Python 3.14 Vector Store
+├── evaluation_results.md      # Detailed Trace Logs
+├── PROJECT_REPORT.md          # Technical Documentation
+├── data/                      # Source University PDFs
+│   ├── CS_Department_Catalog.pdf
+│   ├── EE_Department_Catalog.pdf
+│   └── Faculty_Directory.pdf
+└── university-advisor-ui/     # React Frontend
+    ├── src/
+    │   ├── App.tsx            # Main Chat Interface
+    │   ├── services/          # API Connection Logic
+    │   └── index.css          # Premium Styling
+    ├── package.json
+    └── vite.config.ts
+```
