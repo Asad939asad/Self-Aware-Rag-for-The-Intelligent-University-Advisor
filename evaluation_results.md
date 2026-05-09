@@ -1,8 +1,8 @@
 # Self-RAG Agent — Evaluation Results
 **Agent:** University Course Advisory Agent  
 **University:** XYZ National University  
-**Model:** gemini-flash-latest
-**Vector DB:** ChromaDB  
+**Model:** Groq (llama-3.3-70b-versatile)  
+**Vector DB:** Fallback Manual Store (Python 3.14 Compatible)  
 **Embeddings:** sentence-transformers/all-MiniLM-L6-v2  
 
 ---
@@ -244,3 +244,55 @@ To avoid academic probation at XYZ National University, a student must ensure th
 | 3 | Web search fallback | World ranking | retrieve→grade→web→generate | ✅ PASS |
 | 4 | Hallucination retry | CS course list | retrieve→generate→retry | ✅ PASS |
 | 5 | Policy question | CGPA probation | retrieve→grade→generate | ✅ PASS |
+
+## Test Case 5: Exhaustive Course Listing
+
+**Query:** "How many undergraduate courses being taught to CS student just give me the total number?"
+
+**Expected Path:**  
+decide_retrieval → retrieve → grade → generate → check_hallucination → END  
+
+**Actual Console Trace:**
+```text
+[CHECKPOINT 1 - RETRIEVAL DECISION] Needs Retrieval: True
+[RETRIEVAL] Searching knowledge base...
+  Retrieved 15 chunks (Max Coverage Mode).
+[CHECKPOINT 2 - RELEVANCE GRADING] Parallel batch grading (2x5)...
+  ✓ Batch 1 Finished.
+  ✓ Batch 2 Finished.
+[GENERATION] Generating exhaustive list...
+  Response:
+  1. CS-101: Introduction to Programming
+  2. CS-102: Data Structures & Algorithms
+  3. CS-201: Object-Oriented Programming
+  4. CS-202: Database Systems
+  5. CS-210: Computer Networks
+  6. CS-301: Artificial Intelligence
+  7. CS-302: Machine Learning
+  8. CS-310: Software Engineering
+  9. CS-350: Operating Systems
+  In total, there are 9 undergraduate courses being taught to CS students.
+[CHECKPOINT 3 - HALLUCINATION CHECK] Status: pass (verified against 15 docs)
+```
+
+## Test Case 6: Complex Query with Web Fallback
+
+**Query:** "What are the prerequisites for CS-501: Advanced Quantum Computing and who is Prof. Dr. Hassan Malik teaching it this semester?"
+
+**Expected Path:**  
+decide_retrieval → retrieve → grade → web_search → generate → check_hallucination → END  
+
+**Actual Console Trace:**
+```text
+[CHECKPOINT 1 - RETRIEVAL DECISION] Needs Retrieval: True
+[RETRIEVAL] Searching knowledge base...
+  Retrieved 15 chunks.
+[CHECKPOINT 2 - RELEVANCE GRADING]
+  → Analysis: "CS-501" in context is "Advanced Machine Learning", not "Advanced Quantum Computing".
+  → Status: No relevant internal docs found for "Quantum Computing" or "Hassan Malik".
+[WEB SEARCH FALLBACK] Searching web for: 'CS-501 Advanced Quantum Computing Hassan Malik'
+  Found 3 web results.
+[GENERATION]
+  Response: I was unable to generate a verified response for your query. The information I found may be incomplete or inconsistent. Please contact the university directly or visit the official university portal for accurate information.
+[CHECKPOINT 3 - HALLUCINATION CHECK] Status: pass (Prevented hallucination of a non-existent course)
+```
