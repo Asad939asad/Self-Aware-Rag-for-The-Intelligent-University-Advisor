@@ -244,6 +244,8 @@ To avoid academic probation at XYZ National University, a student must ensure th
 | 3 | Web search fallback | World ranking | retrieve→grade→web→generate | ✅ PASS |
 | 4 | Hallucination retry | CS course list | retrieve→generate→retry | ✅ PASS |
 | 5 | Policy question | CGPA probation | retrieve→grade→generate | ✅ PASS |
+| 6 | Exhaustive Listing | Undergraduate courses | retrieve→grade→generate | ✅ PASS |
+| 7 | Veracity Check | Quantum Computing | retrieve→grade→web→generate | ✅ PASS |
 
 ## Test Case 5: Exhaustive Course Listing
 
