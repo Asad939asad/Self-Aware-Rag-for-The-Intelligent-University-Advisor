@@ -1,6 +1,6 @@
 import { WindowMemoryItem } from "../types"
 
-const API_BASE = "http://localhost:8000"
+const API_BASE = ""
 const MOCK_MODE = false // Set to false when backend is running
 
 export interface ChatRequest {

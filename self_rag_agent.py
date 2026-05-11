@@ -1,5 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import List, Optional
 import uvicorn
@@ -107,5 +109,15 @@ async def pipeline_status():
 async def run_pipeline():
     return {"status": "skipped", "message": "Pipeline logic not applicable to RAG Agent"}
 
+# Serve Frontend - This MUST be at the end
+# We assume the built frontend is in a directory named 'static'
+if os.path.exists("static"):
+    app_api.mount("/", StaticFiles(directory="static", html=True), name="static")
+
+    @app_api.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        # Fallback for SPA routing
+        return FileResponse("static/index.html")
+
 if __name__ == "__main__":
-    uvicorn.run("self_rag_agent:app_api", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("self_rag_agent:app_api", host="0.0.0.0", port=7860, reload=False)
