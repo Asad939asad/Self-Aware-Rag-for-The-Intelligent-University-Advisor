@@ -144,9 +144,10 @@ async def grade_documents(state: AgentState) -> dict:
 
     print(f"\n[CHECKPOINT 2 - RELEVANCE GRADING] Parallel batch grading {len(docs)} documents in 2 batches...")
     
-    # Split into batches of 5 (for a total of 10 docs)
+    # Split into 3 batches of 5 (to process all 15 retrieved docs)
     batch1 = docs[:5]
     batch2 = docs[5:10]
+    batch3 = docs[10:15]
 
     async def grade_batch(batch, batch_num):
         if not batch:
@@ -184,10 +185,11 @@ async def grade_documents(state: AgentState) -> dict:
             print(f"  × Batch {batch_num} Error: {e}")
             return []
 
-    # Run 2 batches in parallel
+    # Run batches in parallel
     results = await asyncio.gather(
         grade_batch(batch1, 1),
-        grade_batch(batch2, 2)
+        grade_batch(batch2, 2),
+        grade_batch(batch3, 3)
     )
     
     # Flatten results
