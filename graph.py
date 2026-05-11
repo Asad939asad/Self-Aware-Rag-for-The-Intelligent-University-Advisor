@@ -360,14 +360,18 @@ def check_hallucination(state: AgentState) -> dict:
     else:
       strictness_instruction = """
   This response was generated from OFFICIAL UNIVERSITY DOCUMENTS.
-  Apply STRICT checking:
-  - Flag any specific fact (number, name, policy, fee, grade, course code) 
-    that is NOT present in the context.
+  Apply STRICT but INTELLIGENT checking:
+  - Flag any specific entity (name, fee, course code, grade) that is NOT present in the context.
+  - For NUMBERS and COUNTS:
+    a) If a number (like a fee or credit hour) is explicitly stated in the response, verify it matches the context.
+    b) If a total count is provided (e.g., 'There are 8 courses'), do NOT flag it if the items being counted are all present and verified in the context.
   - Do NOT flag the university name "XYZ National University" as a hallucination.
   - Do NOT flag polite conversational phrases or general framing.
   - Do NOT flag minor rephrasing or summarization of document content."""
     
     prompt = f"""You are a hallucination detector for a university advisory AI.
+    
+    Student Question: "{state['query']}"
     
   {strictness_instruction}
   
